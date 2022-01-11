@@ -22,7 +22,7 @@ public class ObjectUtil {
 
             String key = param.getKey();
             String paramValue = (param.getValue() != null && param.getValue().length > 0 ? param.getValue()[0] : "");
-            String obj = StrUtil.endWithIgnoreCase(param.getKey(), "password") ? "你是看不见我的" : paramValue;
+            String obj = StrUtil.endWithIgnoreCase(param.getKey(), "password") ? "密码已被隐藏" : paramValue;
             params.put(key,obj);
         }
         return new Gson().toJson(params);

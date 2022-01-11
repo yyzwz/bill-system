@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import SetPassword from "@/views/my-components/xboot/set-password";
+import SetPassword from "@/views/my-components/zwz/set-password";
 import { changePass } from "@/api/index";
 export default {
   name: "change_pass",

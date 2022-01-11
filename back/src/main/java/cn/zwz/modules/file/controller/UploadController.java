@@ -31,15 +31,9 @@ import java.io.InputStream;
 @Slf4j
 @RestController
 @Api(description = "文件上传接口")
-@RequestMapping("/xboot/upload")
+@RequestMapping("/zwz/upload")
 @Transactional
 public class UploadController {
-
-    @Autowired
-    private RedisRaterLimiter redisRaterLimiter;
-
-    @Autowired
-    private IpInfoUtil ipInfoUtil;
 
     @Autowired
     private FileManageFactory fileManageFactory;
@@ -59,12 +53,6 @@ public class UploadController {
         Setting setting = settingService.get(SettingConstant.OSS_USED);
         if(setting==null|| StrUtil.isBlank(setting.getValue())){
             return ResultUtil.error(501, "您还未配置OSS存储服务");
-        }
-
-        // IP限流 在线Demo所需 5分钟限1个请求
-        String token = redisRaterLimiter.acquireToken("upload:"+ipInfoUtil.getIpAddr(request), 1, 300000L);
-        if (StrUtil.isBlank(token)) {
-            throw new LimitException("上传那么多干嘛，等等再传吧");
         }
 
         if(StrUtil.isNotBlank(base64)){

@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "xboot.ratelimit")
 public class XbootLimitProperties {
 
     /**

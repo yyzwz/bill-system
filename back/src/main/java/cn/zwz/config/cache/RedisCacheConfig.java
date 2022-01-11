@@ -28,11 +28,9 @@ import java.time.Duration;
 @Configuration
 public class RedisCacheConfig extends CachingConfigurerSupport {
 
-    @Value("${xboot.cache.unit:day}")
-    private String unit;
+    private String unit = "day";
 
-    @Value("${xboot.cache.time:-1}")
-    private Integer time;
+    private Integer time = 15;
 
     /**
      * 自定义序列化方式

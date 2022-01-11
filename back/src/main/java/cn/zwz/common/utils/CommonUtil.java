@@ -2,7 +2,7 @@ package cn.zwz.common.utils;
 
 import cn.zwz.common.constant.CommonConstant;
 import cn.zwz.common.constant.SettingConstant;
-import cn.zwz.common.exception.XbootException;
+import cn.zwz.common.exception.ZwzException;
 import cn.hutool.core.util.StrUtil;
 
 import java.util.Random;
@@ -95,7 +95,7 @@ public class CommonUtil {
         // 判断是否包含非法字符
         for (String keyword : CommonConstant.STOP_WORDS) {
             if (param.contains(keyword)) {
-                throw new XbootException("名称包含禁用词：" + keyword);
+                throw new ZwzException("名称包含禁用词：" + keyword);
             }
         }
     }

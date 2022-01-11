@@ -19,9 +19,7 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-
-        // 允许使用socketJs方式访问 即可通过http://IP:PORT/xboot/ws来和服务端websocket连接
-        registry.addEndpoint("/xboot/ws").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/zwz/ws").setAllowedOrigins("*").withSockJS();
     }
 
     /**
@@ -30,7 +28,6 @@ public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-
         // 订阅Broker名称 user点对点 topic广播即群发
         registry.enableSimpleBroker("/user","/topic");
         // 全局(客户端)使用的消息前缀

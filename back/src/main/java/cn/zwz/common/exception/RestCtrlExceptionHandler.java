@@ -6,14 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author 郑为中
@@ -22,9 +18,9 @@ import java.util.Map;
 @RestControllerAdvice
 public class RestCtrlExceptionHandler {
 
-    @ExceptionHandler(XbootException.class)
+    @ExceptionHandler(ZwzException.class)
     @ResponseStatus(value = HttpStatus.OK)
-    public Result<Object> handleXbootException(XbootException e) {
+    public Result<Object> handleXbootException(ZwzException e) {
 
         String errorMsg = "XBoot exception";
         if (e!=null){

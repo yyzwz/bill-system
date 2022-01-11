@@ -1,18 +1,17 @@
 <template>
   <div class="foot">
-    <Row type="flex" justify="space-around" class="help">
-      <a class="item" href="https://github.com/Exrick/x-boot" target="_blank">{{ $t('help') }}</a>
-      <a class="item" href="https://github.com/Exrick/x-boot" target="_blank">{{ $t('privacy') }}</a>
-      <a class="item" href="https://github.com/Exrick/x-boot" target="_blank">{{ $t('terms') }}</a>
-    </Row>
     <Row type="flex" justify="center" class="copyright">
-      Copyright © 2018 - Present
+      郑为中
       <a
-        href="http://exrick.cn"
+        href="https://blog.csdn.net/qq_41464123"
         target="_blank"
         style="margin:0 5px;"
-      >Exrick</a>
-      {{ $t('rights') }}
+      >CSDN博客</a>
+      <a
+        href="https://gitee.com/yyzwz"
+        target="_blank"
+        style="margin:0 5px;"
+      >GitEE</a>
     </Row>
   </div>
 </template>
@@ -26,10 +25,10 @@ export default {
 <style lang="less">
 .foot {
   width: 100%;
-  margin-top: 10vh;
+  margin-top: 5vh;
   margin-bottom: 3vh;
   color: rgba(0, 0, 0, 0.45);
-  font-size: 14px;
+  font-size: 18px;
   .help {
     margin: 0 auto;
     margin-bottom: 1vh;

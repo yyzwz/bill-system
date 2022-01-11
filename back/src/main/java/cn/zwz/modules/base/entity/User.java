@@ -2,7 +2,6 @@ package cn.zwz.modules.base.entity;
 
 import cn.zwz.base.XbootBaseEntity;
 import cn.zwz.common.constant.CommonConstant;
-import cn.zwz.common.utils.NameUtil;
 import cn.zwz.modules.base.vo.PermissionDTO;
 import cn.zwz.modules.base.vo.RoleDTO;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -20,9 +19,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -43,24 +39,18 @@ public class User extends XbootBaseEntity {
 
     @ApiModelProperty(value = "登录名")
     @Column(unique = true, nullable = false)
-    @Pattern(regexp = NameUtil.regUsername, message = "登录账号不能包含特殊字符且长度不能>16")
     private String username;
 
     @ApiModelProperty(value = "密码")
-    @NotNull(message = "不能为空")
     private String password;
 
     @ApiModelProperty(value = "用户名/昵称/姓名")
-    @NotNull(message = "不能为空")
-    @Size(max = 20, message = "昵称长度不能超过20")
     private String nickname;
 
     @ApiModelProperty(value = "手机")
-    @Pattern(regexp = NameUtil.regMobile, message = "11位手机号格式不正确")
     private String mobile;
 
     @ApiModelProperty(value = "邮箱")
-    @Pattern(regexp = NameUtil.regEmail, message = "邮箱格式不正确")
     private String email;
 
     @ApiModelProperty(value = "省市县地址")

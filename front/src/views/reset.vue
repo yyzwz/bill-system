@@ -113,8 +113,8 @@ import { validateMobile, validatePassword } from "@/libs/validate";
 import Header from "@/views/main-components/header";
 import Footer from "@/views/main-components/footer";
 import LangSwitch from "@/views/main-components/lang-switch";
-import CountDownButton from "@/views/my-components/xboot/count-down-button";
-import SetPassword from "@/views/my-components/xboot/set-password";
+import CountDownButton from "@/views/my-components/zwz/count-down-button";
+import SetPassword from "@/views/my-components/zwz/set-password";
 var vaptchaObject;
 export default {
   components: {

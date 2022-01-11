@@ -1,7 +1,7 @@
 package cn.zwz.modules.file.manage.impl;
 
 import cn.zwz.common.constant.SettingConstant;
-import cn.zwz.common.exception.XbootException;
+import cn.zwz.common.exception.ZwzException;
 import cn.zwz.modules.base.entity.Setting;
 import cn.zwz.modules.base.service.SettingService;
 import cn.zwz.modules.base.vo.OssSetting;
@@ -10,7 +10,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * @author 郑为中
@@ -36,7 +33,7 @@ public class LocalFileManage implements FileManage {
 
         Setting setting = settingService.get(SettingConstant.LOCAL_OSS);
         if(setting==null|| StrUtil.isBlank(setting.getValue())){
-            throw new XbootException("您还未配置本地存储");
+            throw new ZwzException("未配置本地存储");
         }
         return new Gson().fromJson(setting.getValue(), OssSetting.class);
     }
@@ -45,7 +42,7 @@ public class LocalFileManage implements FileManage {
     @Deprecated
     public String pathUpload(String filePath, String key) {
 
-        throw new XbootException("暂不支持");
+        throw new ZwzException("暂不支持");
     }
 
     /**
@@ -67,14 +64,14 @@ public class LocalFileManage implements FileManage {
         }
         File f = new File(path + "/" + key);
         if(f.exists()){
-            throw new XbootException("文件名已存在");
+            throw new ZwzException("文件名已存在");
         }
         try {
             file.transferTo(f);
             return path + "/" + key;
         } catch (IOException e) {
             log.error(e.toString());
-            throw new XbootException("上传文件出错");
+            throw new ZwzException("上传文件出错");
         }
     }
 
@@ -126,7 +123,7 @@ public class LocalFileManage implements FileManage {
 
         File file = new File(url);
         if (!file.exists()) {
-            throw new XbootException("文件不存在");
+            throw new ZwzException("文件不存在");
         }
 
         try (FileInputStream is = new FileInputStream(file);
@@ -141,7 +138,7 @@ public class LocalFileManage implements FileManage {
             }
         } catch (IOException e) {
             log.warn(e.toString());
-            throw new XbootException("读取下载文件出错");
+            throw new ZwzException("读取下载文件出错");
         }
     }
 }

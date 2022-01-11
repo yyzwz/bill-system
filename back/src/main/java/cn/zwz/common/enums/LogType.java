@@ -13,15 +13,5 @@ public enum LogType {
     /**
      * 1登录
      */
-    LOGIN,
-
-    /**
-     * 2会员操作
-     */
-    MEMBER_OPERATION,
-
-    /**
-     * 3会员登录
-     */
-    MEMBER_LOGIN,
+    LOGIN
 }

@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +21,7 @@ import java.net.UnknownHostException;
 @Component
 public class IpInfoUtil {
 
-    @Value("${xboot.qqlbs.key}")
-    private String key;
+    private String key = "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX";
 
     @Autowired
     private AsyncUtil asyncUtil;

@@ -2,17 +2,13 @@ package cn.zwz.common.aop;
 
 import cn.zwz.common.annotation.SystemLog;
 import cn.zwz.common.utils.IpInfoUtil;
-import cn.zwz.common.utils.ObjectUtil;
 import cn.zwz.common.utils.ThreadPoolUtil;
 import cn.zwz.modules.base.entity.Log;
-import cn.zwz.modules.base.entity.elasticsearch.EsLog;
 import cn.zwz.modules.base.service.LogService;
-import cn.zwz.modules.base.service.elasticsearch.EsLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,12 +31,6 @@ public class SystemLogAspect {
 
     private static final ThreadLocal<Date> beginTimeThreadLocal = new NamedThreadLocal<Date>("ThreadLocal beginTime");
 
-    @Value("${xboot.logRecord.es:false}")
-    private Boolean esRecord;
-
-    @Autowired
-    private EsLogService esLogService;
-
     @Autowired
     private LogService logService;
 
@@ -53,7 +43,6 @@ public class SystemLogAspect {
     /**
      * Controller层切点,注解方式
      */
-    //@Pointcut("execution(* *..controller..*Controller*.*(..))")
     @Pointcut("@annotation(cn.zwz.common.annotation.SystemLog)")
     public void controllerAspect() {
 
@@ -66,12 +55,9 @@ public class SystemLogAspect {
      */
     @Before("controllerAspect()")
     public void doBefore(JoinPoint joinPoint) throws InterruptedException{
-
-        //线程绑定变量（该数据只有当前请求的线程可见）
         Date beginTime = new Date();
         beginTimeThreadLocal.set(beginTime);
     }
-
 
     /**
      * 后置通知(在方法执行之后并返回数据) 用于拦截Controller层无异常的操作
@@ -90,85 +76,34 @@ public class SystemLogAspect {
             }
             UserDetails user = (UserDetails) principal;
             username = user.getUsername();
-            if(esRecord){
-                EsLog esLog = new EsLog();
+            Log log = new Log();
+            //请求用户
+            log.setUsername(username);
+            //日志标题
+            log.setName(description);
+            //日志类型
+            log.setLogType(type);
+            //日志请求url
+            log.setRequestUrl(request.getRequestURI());
+            //请求方式
+            log.setRequestType(request.getMethod());
+            //请求参数
+            log.setMapToParams(logParams);
+            //请求IP
+            log.setIp(ipInfoUtil.getIpAddr(request));
+            //IP地址
+            log.setIpInfo(ipInfoUtil.getIpCity(request));
+            //请求开始时间
+            long beginTime = beginTimeThreadLocal.get().getTime();
+            long endTime = System.currentTimeMillis();
+            //请求耗时
+            Long logElapsedTime = endTime - beginTime;
+            log.setCostTime(logElapsedTime.intValue());
+            //调用线程保存至ES
+            ThreadPoolUtil.getPool().execute(new SaveSystemLogThread(log, logService));
 
-                //请求用户
-                esLog.setUsername(username);
-                //日志标题
-                esLog.setName(description);
-                //日志类型
-                esLog.setLogType(type);
-                //日志请求url
-                esLog.setRequestUrl(request.getRequestURI());
-                //请求方式
-                esLog.setRequestType(request.getMethod());
-                //请求参数
-                esLog.setMapToParams(logParams);
-                //请求IP
-                esLog.setIp(ipInfoUtil.getIpAddr(request));
-                //IP地址
-                esLog.setIpInfo(ipInfoUtil.getIpCity(request));
-                //请求开始时间
-                long beginTime = beginTimeThreadLocal.get().getTime();
-                long endTime = System.currentTimeMillis();
-                //请求耗时
-                Long logElapsedTime = endTime - beginTime;
-                esLog.setCostTime(logElapsedTime.intValue());
-
-                //调用线程保存至ES
-                ThreadPoolUtil.getPool().execute(new SaveEsSystemLogThread(esLog, esLogService));
-            }else{
-                Log log = new Log();
-
-                //请求用户
-                log.setUsername(username);
-                //日志标题
-                log.setName(description);
-                //日志类型
-                log.setLogType(type);
-                //日志请求url
-                log.setRequestUrl(request.getRequestURI());
-                //请求方式
-                log.setRequestType(request.getMethod());
-                //请求参数
-                log.setMapToParams(logParams);
-                //请求IP
-                log.setIp(ipInfoUtil.getIpAddr(request));
-                //IP地址
-                log.setIpInfo(ipInfoUtil.getIpCity(request));
-                //请求开始时间
-                long beginTime = beginTimeThreadLocal.get().getTime();
-                long endTime = System.currentTimeMillis();
-                //请求耗时
-                Long logElapsedTime = endTime - beginTime;
-                log.setCostTime(logElapsedTime.intValue());
-
-                //调用线程保存至ES
-                ThreadPoolUtil.getPool().execute(new SaveSystemLogThread(log, logService));
-            }
         } catch (Exception e) {
             log.error("AOP后置通知异常", e);
-        }
-    }
-
-    /**
-     * 保存日志至ES
-     */
-    private static class SaveEsSystemLogThread implements Runnable {
-
-        private EsLog esLog;
-        private EsLogService esLogService;
-
-        public SaveEsSystemLogThread(EsLog esLog, EsLogService esLogService) {
-            this.esLog = esLog;
-            this.esLogService = esLogService;
-        }
-
-        @Override
-        public void run() {
-
-            esLogService.saveLog(esLog);
         }
     }
 
@@ -187,7 +122,6 @@ public class SystemLogAspect {
 
         @Override
         public void run() {
-
             logService.save(log);
         }
     }

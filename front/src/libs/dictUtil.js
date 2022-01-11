@@ -27,16 +27,6 @@ dictUtil.initDictData = function (vm) {
             vm.$store.commit("setLeaveType", res.result);
         }
     });
-    axios.get(getDictData + "commodity_type").then(res => {
-        if(res.success){
-            vm.$store.commit("setCommodityType", res.result);
-        }
-    });
-    axios.get(getDictData + "supplierType").then(res => {
-        if(res.success){
-            vm.$store.commit("setSupplierType", res.result);
-        }
-    });
 };
 
 export default dictUtil;

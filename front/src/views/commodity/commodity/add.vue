@@ -25,11 +25,9 @@
           <FormItem label="商品分类" prop="type"  >
             <!-- <Input v-model="form.type" clearable style="width:570px"/> -->
             <Select v-model="form.type">
-              <Option
-                v-for="(item, i) in this.$store.state.dict.commodityType" clearable style="width:570px"
-                :key="i"
-                :value="item.value"
-              >{{item.title}}</Option>
+              <Option value="水果">水果</Option>
+              <Option value="零食">零食</Option>
+              <Option value="玩具">玩具</Option>
             </Select>
           </FormItem>
           <FormItem label="供应商" prop="supplierId"  >

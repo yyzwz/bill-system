@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Api(description = "商品管理接口")
-@RequestMapping("/xboot/commodity")
+@RequestMapping("/zwz/commodity")
 @Transactional
 public class CommodityController {
 

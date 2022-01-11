@@ -38,8 +38,4 @@ public class ThreadPoolUtil {
     public static ThreadPoolExecutor getPool() {
         return pool;
     }
-
-    public static void main(String[] args) {
-        System.out.println(pool.getPoolSize());
-    }
 }

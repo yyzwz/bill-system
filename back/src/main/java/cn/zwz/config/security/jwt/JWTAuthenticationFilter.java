@@ -3,15 +3,10 @@ package cn.zwz.config.security.jwt;
 import cn.zwz.common.constant.SecurityConstant;
 import cn.zwz.common.utils.ResponseUtil;
 import cn.zwz.common.utils.SecurityUtil;
-import cn.zwz.common.vo.TokenMember;
 import cn.zwz.common.vo.TokenUser;
-import cn.zwz.config.properties.IgnoredUrlsProperties;
-import cn.zwz.config.properties.XbootAppTokenProperties;
 import cn.zwz.config.properties.XbootTokenProperties;
-import cn.zwz.modules.app.entity.Member;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -23,8 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.PathMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -33,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,19 +36,15 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
 
     private XbootTokenProperties tokenProperties;
 
-    private XbootAppTokenProperties appTokenProperties;
-
     private StringRedisTemplate redisTemplate;
 
     private SecurityUtil securityUtil;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager,
                                    XbootTokenProperties tokenProperties,
-                                   XbootAppTokenProperties appTokenProperties,
                                    StringRedisTemplate redisTemplate, SecurityUtil securityUtil) {
         super(authenticationManager);
         this.tokenProperties = tokenProperties;
-        this.appTokenProperties = appTokenProperties;
         this.redisTemplate = redisTemplate;
         this.securityUtil = securityUtil;
     }
@@ -84,11 +72,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
         }
         try {
             UsernamePasswordAuthenticationToken authentication = null;
-            if(StrUtil.isNotBlank(header)){
-                authentication = getAuthentication(header, response);
-            }else{
-                authentication = getAppAuthentication(appHeader, response);
-            }
+            authentication = getAuthentication(header, response);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }catch (Exception e){
             e.toString();
@@ -147,33 +131,6 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
                 ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"解析token错误"));
             }
         }
-
-        if(StrUtil.isNotBlank(username)) {
-            // 踩坑提醒 此处password不能为null
-            User principal = new User(username, "", authorities);
-            return new UsernamePasswordAuthenticationToken(principal, null, authorities);
-        }
-        return null;
-    }
-
-    private UsernamePasswordAuthenticationToken getAppAuthentication(String appHeader, HttpServletResponse response) {
-
-        // 用户名
-        String username = null;
-
-        String v = redisTemplate.opsForValue().get(SecurityConstant.TOKEN_MEMBER_PRE + appHeader);
-        if(StrUtil.isBlank(v)){
-            ResponseUtil.out(response, ResponseUtil.resultMap(false,401,"会员登录已失效，请重新登录"));
-            return null;
-        }
-        TokenMember member = new Gson().fromJson(v, TokenMember.class);
-        username = member.getUsername();
-        // 权限
-        List<GrantedAuthority> authorities = securityUtil.getCurrMemberPerms(username);
-
-        // 重新设置失效时间
-        redisTemplate.opsForValue().set(SecurityConstant.MEMBER_TOKEN + username + ":" + member.getPlatform(), appHeader, appTokenProperties.getTokenExpireTime(), TimeUnit.DAYS);
-        redisTemplate.opsForValue().set(SecurityConstant.TOKEN_MEMBER_PRE + appHeader, v, appTokenProperties.getTokenExpireTime(), TimeUnit.DAYS);
 
         if(StrUtil.isNotBlank(username)) {
             // 踩坑提醒 此处password不能为null

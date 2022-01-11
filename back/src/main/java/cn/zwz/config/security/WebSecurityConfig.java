@@ -2,7 +2,6 @@ package cn.zwz.config.security;
 
 import cn.zwz.common.utils.SecurityUtil;
 import cn.zwz.config.properties.IgnoredUrlsProperties;
-import cn.zwz.config.properties.XbootAppTokenProperties;
 import cn.zwz.config.properties.XbootTokenProperties;
 import cn.zwz.config.security.jwt.AuthenticationFailHandler;
 import cn.zwz.config.security.jwt.AuthenticationSuccessHandler;
@@ -39,9 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private XbootTokenProperties tokenProperties;
-
-    @Autowired
-    private XbootAppTokenProperties appTokenProperties;
 
     @Autowired
     private IgnoredUrlsProperties ignoredUrlsProperties;
@@ -98,9 +94,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         registry.and()
                 // 表单登录方式
                 .formLogin()
-                .loginPage("/xboot/common/needLogin")
+                .loginPage("/zwz/common/needLogin")
                 // 登录请求url
-                .loginProcessingUrl("/xboot/login")
+                .loginProcessingUrl("/zwz/login")
                 .permitAll()
                 // 成功处理类
                 .successHandler(successHandler)
@@ -140,6 +136,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 添加自定义权限过滤器
                 .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
                 // 添加JWT认证过滤器
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenProperties, appTokenProperties, redisTemplate, securityUtil));
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenProperties, redisTemplate, securityUtil));
     }
 }

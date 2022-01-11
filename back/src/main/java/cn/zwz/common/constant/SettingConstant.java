@@ -14,37 +14,6 @@ public interface SettingConstant {
      * 七牛OSS配置
      */
     String QINIU_OSS = "QINIU_OSS";
-
-    /**
-     * 七牛云存储区域 自动判断
-     */
-    Integer ZONE_AUTO = -1;
-
-    /**
-     * 七牛云存储区域 华东
-     */
-    Integer ZONE_ZERO = 0;
-
-    /**
-     * 七牛云存储区域 华北
-     */
-    Integer ZONE_ONE = 1;
-
-    /**
-     * 七牛云存储区域 华南
-     */
-    Integer ZONE_TWO = 2;
-
-    /**
-     * 七牛云存储区域 北美
-     */
-    Integer ZONE_THREE = 3;
-
-    /**
-     * 七牛云存储区域 东南亚
-     */
-    Integer ZONE_FOUR = 4;
-
     /**
      * 阿里OSS配置
      */

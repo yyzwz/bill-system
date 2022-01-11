@@ -64,6 +64,10 @@ public class ResultUtil<T> {
         return new ResultUtil<T>().setSuccessMsg(msg);
     }
 
+    public static <T> Result<T> success(){
+        return new ResultUtil<T>().setSuccessMsg("OK");
+    }
+
     public static <T> Result<T> error(String msg){
         return new ResultUtil<T>().setErrorMsg(msg);
     }

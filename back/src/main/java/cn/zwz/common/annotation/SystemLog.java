@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * 系统日志自定义注解
  * @author 郑为中
  */
-@Target({ElementType.PARAMETER, ElementType.METHOD})//作用于参数或方法上
+@Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface SystemLog {

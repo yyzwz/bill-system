@@ -1,7 +1,6 @@
 package cn.zwz.modules.base.serviceimpl;
 
 import cn.zwz.common.constant.CommonConstant;
-import cn.zwz.common.utils.SecurityUtil;
 import cn.zwz.common.vo.SearchVo;
 import cn.zwz.modules.base.dao.UserDao;
 import cn.zwz.modules.base.dao.mapper.PermissionMapper;
@@ -48,9 +47,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PermissionMapper permissionMapper;
-
-    @Autowired
-    private SecurityUtil securityUtil;
 
     @Override
     public UserDao getRepository() {
@@ -168,12 +164,6 @@ public class UserServiceImpl implements UserService {
                     Date start = DateUtil.parse(searchVo.getStartDate());
                     Date end = DateUtil.parse(searchVo.getEndDate());
                     list.add(cb.between(createTimeField, start, DateUtil.endOfDay(end)));
-                }
-
-                //数据权限
-                List<String> depIds = securityUtil.getDeparmentIds();
-                if(depIds!=null&&depIds.size()>0){
-                    list.add(departmentIdField.in(depIds));
                 }
 
                 Predicate[] arr = new Predicate[list.size()];

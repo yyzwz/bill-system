@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Api(description = "供应商管理接口")
-@RequestMapping("/xboot/supplier")
+@RequestMapping("/zwz/supplier")
 @Transactional
 public class SupplierController {
 

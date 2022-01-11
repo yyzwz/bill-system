@@ -1,6 +1,6 @@
 package cn.zwz.common.utils;
 
-import cn.zwz.common.exception.XbootException;
+import cn.zwz.common.exception.ZwzException;
 import cn.zwz.common.vo.PageVo;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -175,7 +175,7 @@ public class PageUtil {
         // 判断是否包含非法字符
         for (String keyword : KEYWORDS) {
             if (param.contains(keyword)) {
-                throw new XbootException(param + "包含非法字符");
+                throw new ZwzException(param + "包含非法字符");
             }
         }
     }

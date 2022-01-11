@@ -11,7 +11,6 @@ import cn.zwz.config.properties.XbootLimitProperties;
 import cn.zwz.modules.base.entity.Setting;
 import cn.zwz.modules.base.service.SettingService;
 import cn.zwz.modules.base.vo.OtherSetting;
-import cn.zwz.common.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;

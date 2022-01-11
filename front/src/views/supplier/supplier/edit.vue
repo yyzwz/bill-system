@@ -24,11 +24,9 @@
         </FormItem>
         <FormItem label="供应商分类" prop="type"  >
           <Select v-model="form.type" clearable style="width:570px">
-            <Option
-              v-for="(item, i) in this.$store.state.dict.supplierType"
-              :key="i"
-              :value="item.value"
-            >{{item.title}}</Option>
+              <Option value="一级供应商">一级供应商</Option>
+              <Option value="二级供应商">二级供应商</Option>
+              <Option value="三级供应商">三级供应商</Option>
           </Select>
           <!-- <Input v-model="form.type" clearable style="width:570px"/> -->
         </FormItem>

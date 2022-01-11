@@ -1,219 +1,271 @@
-<style lang="less">
-@import "./home.less";
-@import "../../styles/common.less";
-</style>
-
 <template>
-  <div>
-    <div v-show="currNav=='xboot'" class="home">
-      <Row :gutter="10">
-        <Col :lg="24" :xl="8">
-          <Row :gutter="10">
-            <Col :lg="12" :xl="24" :style="{marginBottom: '10px'}">
-              <Card>
-                <Row type="flex" class="user-info">
-                  <Col span="8">
-                    <Row class-name="made-child-con-middle" type="flex" align="middle">
-                      <img class="avator-img" :src="avatarPath" />
-                    </Row>
-                  </Col>
-                  <Col span="16" style="padding-left:6px;">
-                    <Row class-name="made-child-con-middle" type="flex" align="middle">
-                      <div>
-                        <b class="card-user-info-name">{{ username }}</b>
-                        <p>您好，超市账单管理系统 欢迎您的使用</p>
-                      </div>
-                    </Row>
-                  </Col>
-                </Row>
-                <div class="line-gray"></div>
-                <Row class="margin-top-8">
-                  <Col span="8">
-                    <p class="notwrap">本次登录地点:</p>
-                  </Col>
-                  <Col span="16" class="padding-left-8">{{city}}</Col>
-                </Row>
-              </Card>
-            </Col>
-          </Row>
-        </Col>
-        <Col :lg="24" :xl="16">
-          <Row :gutter="5">
-            <Col :sm="24" :md="12" :lg="6" :style="{marginBottom: '10px'}">
-              <info-card
-                id-name="user_created_count"
-                :end-val="count.createUser"
-                iconType="md-person-add"
-                color="#2d8cf0"
-                intro-text="今日新增用户"
-              ></info-card>
-            </Col>
-            <Col :sm="24" :md="12" :lg="6" :style="{marginBottom: '10px'}">
-              <info-card
-                id-name="visit_count"
-                :end-val="count.visit"
-                iconType="ios-eye"
-                color="#64d572"
-                :iconSize="50"
-                intro-text="今日浏览量"
-              ></info-card>
-            </Col>
-            <Col :sm="24" :md="12" :lg="6" :style="{marginBottom: '10px'}">
-              <info-card
-                id-name="collection_count"
-                :end-val="count.collection"
-                iconType="md-cloud-upload"
-                color="#ffd572"
-                intro-text="今日数据采集量"
-              ></info-card>
-            </Col>
-            <Col :sm="24" :md="12" :lg="6" :style="{marginBottom: '10px'}">
-              <info-card
-                id-name="transfer_count"
-                :end-val="count.transfer"
-                iconType="md-shuffle"
-                color="#f25e43"
-                intro-text="今日服务调用量"
-              ></info-card>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-      <Row :gutter="10">
-        <Col :lg="24" :xl="16" :style="{marginBottom: '10px'}">
-          <visit-volume />
-        </Col>
-        <Col :lg="24" :xl="8" :style="{marginBottom: '10px'}">
-          <visit-separation />
-        </Col>
-      </Row>
-    </div>
-    <div v-show="currNav=='doc'||currNav=='xboot-show'||currNav=='xpay'||currNav=='xmall'">
-      <show />
-    </div>
-    <div v-show="currNav=='app'">
-      <dashboard2 />
-    </div>
-
-    <Modal
-      v-model="showVideo"
-      title="作者亲自制作XBoot炫酷文字快闪宣传片"
-      :styles="{top: '30px'}"
-      footer-hide
-      width="1000"
-    >
-      <iframe
-        src="//player.bilibili.com/player.html?aid=30284667&cid=52827707&page=1"
-        scrolling="no"
-        border="0"
-        frameborder="no"
-        framespacing="0"
-        allowfullscreen="true"
-        style="width:100%;height:550px;"
-      ></iframe>
-    </Modal>
+  <div :style="{ height: clientHeight }" class="topDiv">
+    <Row :gutter="20">
+      <!-- 主体部分 -->
+      <div class="body">
+        <!--logo标题图片 -->
+        <img class="title" src="../../assets/icon/logo.png" alt="" />
+        <!--第二排内容 -->
+        <div class="awayMenu">
+          <!--左侧 -->
+          <div class="awayLeft">
+            <span class="manage2">
+              欢迎
+              <!--用户名称 -->
+              <span>{{ name }}</span>
+            </span>
+            <!--登入地址 -->
+            <div class="manage">登入地址：{{ location }}</div>
+          </div>
+          <!--时间，上下布局 -->
+          <div class="bottom">
+            <!--年月日 -->
+            <span class="showtime">{{ showtime }}</span>
+            <!--时分 -->
+            <span class="showtime2">{{ showtime2 }}</span>
+          </div>
+        </div>
+        <!--三层标题 -->
+        <div class="bigTips">
+          <span style="color:rgba(255,255,255,0.8)"></span>
+          <span style="67.5%"> </span>
+        </div>
+        <!--常用按钮层 -->
+        <div class="buttonMenu">
+          <!--常用按钮盒子 -->
+          <div class="addMenuBox">
+            <!--循环遍历按钮 -->
+            <div
+              class="addMenu"
+              v-for="(item, index) in addMenuTempList"
+              :key="index"
+              @click="selectItem(item)"
+            >
+              {{ item.title }}
+            </div>
+          </div>
+          <!--分隔线 -->
+          <div class="shu"></div>
+        </div>
+      </div>
+    </Row>
   </div>
 </template>
 
 <script>
-import { ipInfo, getNotice } from "@/api/index";
-import visitVolume from "./components/visitVolume.vue";
-import visitSeparation from "./components/visitSeparation.vue";
-import infoCard from "./components/infoCard.vue";
-import show from "./show.vue";
-import dashboard2 from "../xboot-charts/dashboard2/dashboard2.vue";
 import Cookies from "js-cookie";
-import "gitalk/dist/gitalk.css";
-import Gitalk from "gitalk";
-
+import { ipInfo } from "@/api/index";
 export default {
-  name: "home",
-  components: {
-    visitVolume,
-    visitSeparation,
-    infoCard,
-    show,
-    dashboard2
-  },
+  name: "dashboard-2",
   data() {
     return {
-      showVideo: false,
-      count: {
-        createUser: 496,
-        visit: 3264,
-        collection: 24389305,
-        transfer: 39503498
-      },
-      city: "",
-      username: ""
+      name: "",
+      showtime: "",
+      showtime2: "",
+      ip: "",
+      location: "公司内网",
+      jonNumber: "",
+      addMenuTempList: [],
     };
   },
-  computed: {
-    currNav() {
-      return this.$store.state.app.currNav;
-    },
-    avatarPath() {
-      return localStorage.avatorImgPath;
-    }
-  },
+
   methods: {
     init() {
-      let userInfo = JSON.parse(Cookies.get("userInfo"));
-      this.username = userInfo.nickname;
-      ipInfo().then(res => {
+      let user = JSON.parse(Cookies.get("userInfo"));
+      this.name = user.nickname;
+      this.jonNumber = user.username;
+      this.getNowTime();
+      ipInfo().then((res) => {
         if (res.success) {
-          this.city = res.result;
+          this.location = res.result;
         }
       });
+      this.timer = setInterval(this.getNowTime, 60000);
     },
-    showNotice() {
-      getNotice().then(res => {
-        if (res.success) {
-          if (!res.result) {
-            return;
-          }
-          let data = res.result;
-          if (
-            data.open &&
-            (data.title || data.content) &&
-            data.position == "HOME"
-          ) {
-            this.$Notice.info({
-              title: data.title,
-              desc: data.content,
-              duration: data.duration
-            });
-          }
-        }
-      });
-    }
+    getNowTime() {
+      this.showtime = this.format(new Date(), "yyyy年MM月dd日");
+      this.showtime2 = this.format(new Date(), "HH:mm");
+    },
   },
   mounted() {
     this.init();
-    // 通知
-    let noticeFlag = "noticeShowed";
-    let notice = Cookies.get(noticeFlag);
-    if (notice != noticeFlag) {
-      this.showNotice();
-      Cookies.set(noticeFlag, noticeFlag);
-    }
-    // Gitalk
-    var gitalk = new Gitalk({
-      clientID: "a128de2dd7383614273a",
-      clientSecret: "a77691ecb662a8303a6c686ae651ae035868da6e",
-      repo: "xboot-comments",
-      owner: "Exrick",
-      admin: ["Exrick"],
-      distractionFreeMode: false // 遮罩效果
-    });
-    gitalk.render("comments");
-    // 宣传视频
-    let videoFlag = "videoShowed";
-    let xbootVideo = Cookies.get(videoFlag);
-    if (xbootVideo != videoFlag) {
-      this.showVideo = true;
-      Cookies.set(videoFlag, videoFlag);
-    }
-  }
+    this.clientHeight = `${document.documentElement.clientHeight}`; //获取浏览器可视区域高度
+    let that = this;
+    window.onresize = function() {
+      this.clientHeight = `${document.documentElement.clientHeight}`;
+      if (that.$refs.page) {
+        that.$refs.page.style.minHeight = clientHeight - 100 + "px";
+      }
+    };
+  },
+  watch: {
+    clientHeight() {
+      this.changeFixed(this.clientHeight);
+    },
+  },
 };
 </script>
+
+<style lang="less" scoped>
+@import "./home.less";
+.margin {
+  margin-bottom: 20px;
+}
+.awayLeft {
+  width: 60%;
+  display: flex;
+  align-items: center;
+}
+.bottom {
+  width: 30%;
+  margin-left: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.title {
+  width: 30%;
+  margin: 5vh 0;
+}
+.awayMenu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.manage {
+  width: 40%;
+  height: 100%;
+  font-family: Microsoft YaHei;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  color: rgb(255, 255, 255, 0.7);
+}
+.manage2 {
+  width: 60%;
+  height: 100%;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  color: rgb(255, 255, 255, 0.7);
+}
+.buttonMenu {
+  width: 100%;
+  display: flex;
+}
+.bigTips {
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+  font-size: 20px;
+}
+.addMenuBox {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  .addMenu {
+    width: 45%;
+    // min-width: 180px;
+    height: 22%;
+    margin: 2% 2.5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    color: #fff;
+    font-size: 20px;
+  }
+}
+.addMenu :nth-child(5) {
+  margin-bottom: 0;
+}
+.addMenu :nth-child(6) {
+  margin-bottom: 0;
+}
+.shu {
+  width: 0.2%;
+  margin: 0 9.9%;
+  background-color: #4c4c4c;
+}
+.threeButton {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.showtime {
+  font-family: Microsoft YaHei;
+  font-size: 22px;
+  letter-spacing: 1px;
+  color: rgb(255, 255, 255);
+  font-weight: 100;
+  text-align: center;
+}
+.showtime2 {
+  font-family: Microsoft YaHei;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+.homeThreeIcon {
+  opacity: 1;
+  height: 25px;
+  width: 25px;
+  margin-right: 10%;
+}
+.button {
+  width: 60%;
+  height: 28%;
+  min-width: 210px;
+  max-width: 360px;
+  max-height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 99;
+  .left {
+    width: 60%;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+  }
+  .text {
+    color: #fff;
+    font-size: 20px;
+    position: relative;
+  }
+  .shu {
+    width: 1px !important;
+    height: 100%;
+    max-height: 35px;
+    background-color: #fff;
+  }
+  .number {
+    font-size: 22px;
+    color: #fff;
+  }
+}
+.bottomText {
+  opacity: 0.7;
+  width: 100%;
+  margin-top: 7vh;
+  text-align: left;
+  font-size: 16px;
+  color: #e6e6e6;
+  text-decoration: underline;
+}
+</style>

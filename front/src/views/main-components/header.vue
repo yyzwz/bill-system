@@ -1,8 +1,8 @@
 <template>
   <div>
     <Row class="header">
-      <img src="../../assets/xboot.png" width="220px">
-      <div class="description">{{ $t('xboot') }}</div>
+      <img src="../../assets/logo.png" width="220px">
+      <div class="description">超市账单管理系统</div>
     </Row>
   </div>
 </template>
@@ -20,8 +20,8 @@ export default {
   text-align: center;
 
   .description {
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.45);
+    font-size: 22px;
+    color: rgba(0, 0, 0, 0.55);
     margin-top: 1vh;
   }
 }

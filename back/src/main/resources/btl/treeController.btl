@@ -28,7 +28,7 @@ import java.util.Set;
 @Slf4j
 @RestController
 @Api(description = "${entity.description}管理接口")
-@RequestMapping("/xboot/${entity.classNameLowerCase}")
+@RequestMapping("/zwz/${entity.classNameLowerCase}")
 @CacheConfig(cacheNames = "${entity.classNameLowerCase}")
 @Transactional
 public class ${entity.className}Controller {

@@ -160,35 +160,35 @@ import { edit${apiName} } from "@/api/index";
 <%
 if(upload){
 %>
-import uploadPicInput from "@/views/my-components/xboot/upload-pic-input";
+import uploadPicInput from "@/views/my-components/zwz/upload-pic-input";
 <%
 }
 %>
 <%
 if(uploadThumb){
 %>
-import uploadThumb from "@/views/my-components/xboot/upload-pic-thumb";
+import uploadThumb from "@/views/my-components/zwz/upload-pic-thumb";
 <%
 }
 %>
 <%
 if(wangEditor){
 %>
-import wangEditor from "@/views/my-components/xboot/editor";
+import wangEditor from "@/views/my-components/zwz/editor";
 <%
 }
 %>
 <%
 if(quill){
 %>
-import quill from "@/views/my-components/xboot/quill";
+import quill from "@/views/my-components/zwz/quill";
 <%
 }
 %>
 <%
 if(password){
 %>
-import password from "@/views/my-components/xboot/set-password";
+import password from "@/views/my-components/zwz/set-password";
 <%
 }
 %>

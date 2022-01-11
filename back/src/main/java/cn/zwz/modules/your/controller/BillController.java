@@ -32,7 +32,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Api(description = "账单管理接口")
-@RequestMapping("/xboot/bill")
+@RequestMapping("/zwz/bill")
 @Transactional
 public class BillController {
 

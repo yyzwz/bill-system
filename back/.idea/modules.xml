@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/xboot-plus.iml" filepath="$PROJECT_DIR$/xboot-plus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bill-system.iml" filepath="$PROJECT_DIR$/bill-system.iml" />
     </modules>
   </component>
 </project>

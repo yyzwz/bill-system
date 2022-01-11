@@ -1,5 +1,3 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import ViewUI from 'view-design'
 import 'view-design/dist/styles/iview.css'
@@ -8,7 +6,6 @@ import { router } from './router/index'
 import store from './store'
 import i18n from '@/locale'
 import Icon from 'vue-awesome/components/Icon'
-// 按需引入awesome图标
 import 'vue-awesome/icons/brands/qq'
 import 'vue-awesome/icons/brands/weixin'
 import 'vue-awesome/icons/brands/weibo'
@@ -25,7 +22,6 @@ import VueLazyload from 'vue-lazyload'
 import VueClipboard from 'vue-clipboard2'
 import VueApexCharts from 'vue-apexcharts'
 import '@babel/polyfill'
-
 Vue.config.productionTip = false
 Vue.use(VueLazyload, {
     error: require('./assets/img-error.png'),
@@ -41,7 +37,6 @@ Vue.use(hasRole);
 Vue.use(iviewArea);
 Vue.use(VueApexCharts);
 Vue.component('apexchart', VueApexCharts);
-// 挂载全局使用的方法
 Vue.prototype.getRequest = getRequest;
 Vue.prototype.postRequest = postRequest;
 Vue.prototype.putRequest = putRequest;
@@ -52,8 +47,6 @@ Vue.prototype.setStore = setStore;
 Vue.prototype.getStore = getStore;
 Vue.prototype.removeStore = removeStore;
 Vue.prototype.format = format;
-
-/* eslint-disable no-new */
 new Vue({
     el: '#app',
     router,
@@ -64,12 +57,9 @@ new Vue({
         currentPageName: ''
     },
     mounted() {
-        // 初始化菜单
         util.initRouter(this);
-        // 初始化全局数据字典
         dictUtil.initDictData(this);
         this.currentPageName = this.$route.name;
-        // 显示打开的页面的列表
         this.$store.commit('setOpenedList');
         this.$store.commit('initCachepage');
     }

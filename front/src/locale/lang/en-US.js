@@ -1,5 +1,5 @@
 export default {
-    xboot: 'XBoot is a very good one-stop front-end and back-end rapid development platform',
+    xboot: '超市账单管理系统',
     usernameLogin: 'Username Sign in',
     mobileLogin: 'Phone',
     autoLogin: 'Auto Login',

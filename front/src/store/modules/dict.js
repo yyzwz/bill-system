@@ -5,8 +5,6 @@ const dict = {
         messageType: [],
         priority: [],
         leaveType: [],
-        commodityType: [],
-        supplierType: []
     },
     mutations: {
         // 设置值的改变方法
@@ -22,12 +20,6 @@ const dict = {
         setLeaveType(state, list) {
             state.leaveType = list;
         },
-        setCommodityType(state, list) {
-            state.commodityType = list;
-        },
-        setSupplierType(state, list) {
-            state.supplierType = list;
-        }
     }
 };
 

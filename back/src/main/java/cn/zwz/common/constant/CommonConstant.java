@@ -110,51 +110,15 @@ public interface CommonConstant {
      * 3级菜单
      */
     Integer LEVEL_THREE = 3;
-
-    /**
-     * 消息发送范围
-     */
-    Integer MESSAGE_RANGE_ALL = 0;
-
-    /**
-     * 未读
-     */
-    Integer MESSAGE_STATUS_UNREAD = 0;
-
-    /**
-     * 已读
-     */
-    Integer MESSAGE_STATUS_READ = 1;
-
-    /**
-     * github登录
-     */
-    Integer SOCIAL_TYPE_GITHUB = 0;
-
-    /**
-     * qq登录
-     */
-    Integer SOCIAL_TYPE_QQ = 1;
-
-    /**
-     * wechat登录
-     */
-    Integer SOCIAL_TYPE_WECHAT = 2;
-
-    /**
-     * 微博登录
-     */
-    Integer SOCIAL_TYPE_WEIBO = 3;
-
     /**
      * 短信验证码key前缀
      */
-    String PRE_SMS = "XBOOT_PRE_SMS:";
+    String PRE_SMS = "PRE_SMS:";
 
     /**
      * 邮件验证码key前缀
      */
-    String PRE_EMAIL = "XBOOT_PRE_EMAIL:";
+    String PRE_EMAIL = "PRE_EMAIL:";
 
     /**
      * 本地文件存储

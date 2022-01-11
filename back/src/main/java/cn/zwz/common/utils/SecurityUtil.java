@@ -2,13 +2,9 @@ package cn.zwz.common.utils;
 
 import cn.zwz.common.constant.CommonConstant;
 import cn.zwz.common.constant.SecurityConstant;
-import cn.zwz.common.exception.XbootException;
-import cn.zwz.common.vo.TokenMember;
+import cn.zwz.common.exception.ZwzException;
 import cn.zwz.common.vo.TokenUser;
-import cn.zwz.config.properties.XbootAppTokenProperties;
 import cn.zwz.config.properties.XbootTokenProperties;
-import cn.zwz.modules.app.entity.Member;
-import cn.zwz.modules.app.service.MemberService;
 import cn.zwz.modules.base.entity.*;
 import cn.zwz.modules.base.service.DepartmentService;
 import cn.zwz.modules.base.service.UserService;
@@ -41,12 +37,6 @@ public class SecurityUtil {
     private XbootTokenProperties tokenProperties;
 
     @Autowired
-    private XbootAppTokenProperties appTokenProperties;
-
-    @Autowired
-    private MemberService memberService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -61,7 +51,7 @@ public class SecurityUtil {
     public String getToken(String username, Boolean saveLogin){
 
         if(StrUtil.isBlank(username)){
-            throw new XbootException("username不能为空");
+            throw new ZwzException("username不能为空");
         }
         Boolean saved = false;
         if(saveLogin==null||saveLogin){
@@ -130,7 +120,7 @@ public class SecurityUtil {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if("anonymousUser".equals(principal.toString())){
-            throw new XbootException("未检测到登录用户");
+            throw new ZwzException("未检测到登录用户");
         }
         UserDetails user = (UserDetails) principal;
         return userService.findByUsername(user.getUsername());
@@ -231,59 +221,6 @@ public class SecurityUtil {
         }
         for(PermissionDTO p : user.getPermissions()){
             authorities.add(new SimpleGrantedAuthority(p.getTitle()));
-        }
-        return authorities;
-    }
-
-    public String getAppToken(String username, Integer platform){
-
-        if(StrUtil.isBlank(username)){
-            throw new XbootException("username不能为空");
-        }
-        // 生成token
-        String token = UUID.randomUUID().toString().replace("-", "");
-        TokenMember member = new TokenMember(username, platform);
-        String key = SecurityConstant.MEMBER_TOKEN + member.getUsername()+":"+platform;
-        // 单平台登录 之前的token失效
-        if(appTokenProperties.getSpl()) {
-            String oldToken = redisTemplate.opsForValue().get(key);
-            if (StrUtil.isNotBlank(oldToken)) {
-                redisTemplate.delete(SecurityConstant.TOKEN_MEMBER_PRE + oldToken);
-            }
-        }
-        redisTemplate.opsForValue().set(key, token, appTokenProperties.getTokenExpireTime(), TimeUnit.DAYS);
-        redisTemplate.opsForValue().set(SecurityConstant.TOKEN_MEMBER_PRE + token, new Gson().toJson(member), appTokenProperties.getTokenExpireTime(), TimeUnit.DAYS);
-        return token;
-    }
-
-    /**
-     * 获取当前登录会员
-     * @return
-     */
-    public Member getCurrMember(){
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        if("anonymousUser".equals(principal.toString())){
-            throw new XbootException("未检测到登录会员");
-        }
-        UserDetails user = (UserDetails) principal;
-        return memberService.findByUsername(user.getUsername());
-    }
-
-    /**
-     * 通过会员名获取其拥有权限
-     * @param username
-     */
-    public List<GrantedAuthority> getCurrMemberPerms(String username){
-
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        Member member = memberService.findByUsername(username);
-        if(member==null||StrUtil.isBlank(member.getPermissions())){
-            return authorities;
-        }
-        String[] as = member.getPermissions().split(",");
-        for(String a : as){
-            authorities.add(new SimpleGrantedAuthority(a));
         }
         return authorities;
     }

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 图形验证码过滤器
+ * 验证码过滤器
  * @author 郑为中
  */
 @Slf4j

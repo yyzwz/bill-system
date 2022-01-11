@@ -36,21 +36,6 @@ public interface SecurityConstant {
     String SAVE_LOGIN = "saveLogin";
 
     /**
-     * github保存state前缀key
-     */
-    String GITHUB_STATE = "XBOOT_GITHUB:";
-
-    /**
-     * qq保存state前缀key
-     */
-    String QQ_STATE = "XBOOT_QQ:";
-
-    /**
-     * qq保存state前缀key
-     */
-    String WEIBO_STATE = "XBOOT_WEIBO:";
-
-    /**
      * 交互token前缀key
      */
     String TOKEN_PRE = "XBOOT_TOKEN_PRE:";
@@ -59,14 +44,4 @@ public interface SecurityConstant {
      * 用户token前缀key 单点登录使用
      */
     String USER_TOKEN = "XBOOT_USER_TOKEN:";
-
-    /**
-     * 会员交互token前缀key
-     */
-    String TOKEN_MEMBER_PRE = "XBOOT_TOKEN_MEMBER_PRE:";
-
-    /**
-     * 会员token前缀key
-     */
-    String MEMBER_TOKEN = "XBOOT_MEMBER_TOKEN:";
 }

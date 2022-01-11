@@ -4,6 +4,7 @@
 
 <template>
   <div class="main" :class="{'main-hide-text': shrink}">
+    <!-- 左侧部分开始 -->
     <div
       class="sidebar-menu-con menu-bar"
       :style="{width: shrink ? '60px' : '220px', overflow: shrink ? 'visible' : 'auto'}"
@@ -17,13 +18,17 @@
         :menu-list="menuList"
       >
         <div slot="top" class="logo-con">
-          <img v-show="!shrink" src="../assets/logo.png" key="max-logo" />
-          <img v-show="shrink" src="../assets/logo-min.png" key="min-logo" />
+          <img v-show="!shrink" src="../assets/mainlogo.png" key="max-logo" />
+          <img v-show="shrink" src="../assets/mainlogomin.png" key="min-logo" />
         </div>
       </shrinkable-menu>
     </div>
+    <!-- 左侧部分结束 -->
+    <!-- 顶部部分开始 -->
     <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'220px'}">
-      <div class="main-header">
+      <!-- 上方菜单背景颜色  #FFFACD -->
+      <div class="main-header" style="background:#FFFACD">
+        <!-- 收缩按钮 -->
         <div class="navicon-con">
           <Button
             :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)', height: '48px'}"
@@ -39,7 +44,8 @@
           </div>
           <div class="main-nav-menu" v-if="navType==1||navType==2">
             <Menu mode="horizontal" :active-name="currNav" @on-select="selectNav">
-              <MenuItem v-for="(item, i) in navList.slice(0, sliceNum)" :key="i" :name="item.name">
+              <!-- 顶部菜单 -->
+              <MenuItem v-for="(item, i) in navList.slice(0, sliceNum)" :key="i" :name="item.name" style="background:#FFFACD">
                 <Icon :type="item.icon" v-if="navType==1" />
                 {{item.title}}
               </MenuItem>
@@ -104,7 +110,6 @@
             </DropdownMenu>
           </Dropdown>
           <lock-screen></lock-screen>
-          <message-tip v-model="mesCount"></message-tip>
           <div class="user-dropdown-menu-con">
             <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
               <Dropdown transfer trigger="hover" @on-click="handleClickUserDropdown">
@@ -114,19 +119,20 @@
                   <Avatar :src="avatarPath" style="background: #619fe7;margin-left: 10px;"></Avatar>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="ownSpace">{{ $t('userCenter') }}</DropdownItem>
-                  <DropdownItem name="changePass">{{ $t('changePass') }}</DropdownItem>
-                  <DropdownItem name="loginout" divided>{{ $t('logout') }}</DropdownItem>
+                  <DropdownItem name="ownSpace">个人中心</DropdownItem>
+                  <DropdownItem name="changePass">修改密码</DropdownItem>
+                  <DropdownItem name="loginout" divided>安全退出</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </Row>
           </div>
         </div>
       </div>
-      <div class="tags-con">
+      <div class="tags-con" style="background:#FFFFE0">
         <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
       </div>
     </div>
+    <!-- 顶部部分结束 -->
     <div class="single-page-con" :style="{left: shrink?'60px':'220px'}">
       <div class="single-page">
         <keep-alive :include="cachePage">
@@ -146,12 +152,10 @@ import breadcrumbNav from "./main-components/breadcrumb-nav.vue";
 import fullScreen from "./main-components/fullscreen.vue";
 import lockScreen from "./main-components/lockscreen/lockscreen.vue";
 import messageTip from "./main-components/message-tip.vue";
-import circleLoading from "@/views/my-components/xboot/circle-loading.vue";
+import circleLoading from "@/views/my-components/zwz/circle-loading.vue";
 import Cookies from "js-cookie";
 import util from "@/libs/util.js";
-import { ws, getMessageSendData, getOtherSet } from "@/api/index";
-import SockJS from "sockjs-client";
-var client;
+import { getOtherSet } from "@/api/index";
 export default {
   components: {
     shrinkableMenu,
@@ -164,7 +168,7 @@ export default {
   },
   data() {
     return {
-      sliceNum: 4,
+      sliceNum: 6,
       shrink: false,
       username: "",
       userId: "",
@@ -215,9 +219,8 @@ export default {
   },
   methods: {
     init() {
-      // 菜单
+      // 面包屑 菜单列表
       let pathArr = util.setCurrentPath(this, this.$route.name);
-      // this.$store.commit("updateMenulist");
       if (pathArr.length >= 2) {
         this.$store.commit("addOpenSubmenu", pathArr[1].name);
       }
@@ -227,46 +230,12 @@ export default {
       this.checkTag(this.$route.name);
       let currWidth = document.body.clientWidth;
       if (currWidth <= 1200) {
-        this.sliceNum = 4;
+        this.sliceNum = 2;
       }
-      // 读取未读消息数
-      getMessageSendData({
-        userId: userInfo.id,
-        status: 0
-      }).then(res => {
-        if (res.success) {
-          this.$store.commit("setMessageCount", res.result.totalElements);
-        }
-      });
-      // 消息开关 websocket
-      let messageOpen = this.getStore("messageOpen");
-      if (messageOpen != "0") {
-        this.connect();
-      }
-    },
-    onConnected(frame) {
-      console.log("连接ws成功: " + frame);
-      var topicSubscription = client.subscribe(
-        "/topic/subscribe",
-        this.responseCallback
-      );
-      var queueSubscription = client.subscribe(
-        "/user/" + this.userId + "/queue/subscribe",
-        this.responseCallback
-      );
-    },
-    onFailed(frame) {
-      console.log("连接ws失败： " + JSON.stringify(frame));
-    },
-    responseCallback(frame) {
-      console.log("收到消息：" + frame.body);
-      this.$store.commit("setMessageCount", this.mesCount + 1);
     },
     selectNav(name) {
       this.$store.commit("setCurrNav", name);
       this.setStore("currNav", name);
-      // 清空所有已打开标签
-      // this.$store.commit("clearAllTags");
       if (this.$route.name != "home_index") {
         this.$router.push({
           name: "home_index"
@@ -281,7 +250,9 @@ export default {
       this.$i18n.locale = name;
       this.$store.commit("switchLang", name);
     },
+    // 右上角选项
     handleClickUserDropdown(name) {
+      // 个人中心
       if (name == "ownSpace") {
         util.openNewPage(this, "ownspace_index");
         this.$router.push({
@@ -329,22 +300,19 @@ export default {
       }
     },
     handleSubmenuChange(val) {
-      // console.log(val)
     },
     beforePush(name) {
-      // console.log(name)
       return true;
     },
     fullscreenChange(isFullScreen) {
-      // console.log(isFullScreen);
     },
     resize() {
       let currWidth = document.body.clientWidth;
       if (currWidth <= 1200 && currWidth > 900) {
-        this.sliceNum = 4;
+        this.sliceNum = 6;
         this.shrink = true;
       } else if (currWidth <= 900) {
-        this.sliceNum = 2;
+        this.sliceNum = 6;
         this.shrink = true;
       } else {
         this.sliceNum = 6;
