@@ -1,5 +1,4 @@
 export default {
-    xboot: '超市账单管理系统',
     usernameLogin: '账户密码登录',
     mobileLogin: '手机短信登录',
     autoLogin: '自动登录',

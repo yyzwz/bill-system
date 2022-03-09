@@ -1,7 +1,7 @@
 {
-  "name": "insurance-system",
-  "version": "2.0.0",
-  "description": "超市账单管理系统",
+  "name": "template",
+  "version": "1.0.0",
+  "description": "开发模板",
   "author": "郑为中 <916077357@qq.com>",
   "private": true,
   "scripts": {
@@ -23,7 +23,6 @@
     "print-js": "^1.0.63",
     "quill": "^1.3.7",
     "sockjs-client": "^1.4.0",
-    "stompjs": "^2.3.3",
     "view-design": "^4.2.0",
     "viewerjs": "^1.5.0",
     "vue": "^2.6.10",

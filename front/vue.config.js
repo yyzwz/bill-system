@@ -1,22 +1,23 @@
 const CompressionPlugin = require('compression-webpack-plugin');
-const webpack = require('webpack')
+
 module.exports = {
     devServer: {
         host: '0.0.0.0',
         port: 8080,
         proxy: {
             '/zwz': {
-                target: 'http://127.0.0.1:1314',
+                target: 'http://127.0.0.1:8081',
                 ws: true
             },
             '/foo': {
                 target: '<other_url>'
             }
-        },
-        disableHostCheck: true
+        }
     },
     productionSourceMap: false,
+    // 部署优化
     configureWebpack: {
+        // 使用CDN
         externals: {
             vue: 'Vue',
             'vue-i18n': 'VueI18n',
@@ -37,11 +38,11 @@ module.exports = {
             'js-cookie': 'Cookies',
             wangEditor: 'wangEditor',
             quill: 'Quill',
-            stompjs: 'Stomp',
             'sockjs-client': 'SockJS',
             vuedraggable: 'vuedraggable',
             viewerjs: 'Viewer'
         },
+        // GZIP压缩
         plugins: [
             new CompressionPlugin({
                 test: /\.js$|\.html$|\.css/,

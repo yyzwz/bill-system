@@ -2,10 +2,10 @@
   <div class="search">
     <Card>
       <Row class="operation">
-        <Button @click="add" type="primary" icon="md-add">添加子节点</Button>
-        <Button @click="addRoot" icon="md-add">添加一级节点</Button>
-        <Button @click="delAll" icon="md-trash">批量删除</Button>
-        <Button @click="getParentList" icon="md-refresh">刷新</Button>
+        <Button @click="add" type="primary" icon="md-add" ghost>添加子节点</Button>
+        <Button @click="addRoot" icon="md-add" ghost>添加一级节点</Button>
+        <Button @click="delAll" icon="md-trash" ghost>批量删除</Button>
+        <Button @click="getParentList" icon="md-refresh" ghost>刷新</Button>
         <i-switch v-model="strict" size="large" style="margin-left:5px">
           <span slot="open">级联</span>
           <span slot="close">单选</span>
@@ -243,8 +243,8 @@
           if(item.type=="radio"){
           %>
           <RadioGroup v-model="formAdd.${item.field}">
-            <Radio label="0">请自行编辑单选框</Radio>
-            <Radio label="1">请自行编辑单选框</Radio>
+            <Radio label="0">单选框值A</Radio>
+            <Radio label="1">单选框值B</Radio>
           </RadioGroup>
           <%
           }

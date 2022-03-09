@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.zwz</groupId>
-    <artifactId>bill-system</artifactId>
+    <artifactId>template</artifactId>
     <version>1.0.0</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.0</version>
+        <version>2.6.3</version>
     </parent>
 
     <properties>
@@ -22,13 +22,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-
     <dependencies>
-        <dependency>
-            <groupId>com.github.qcloudsms</groupId>
-            <artifactId>qcloudsms</artifactId>
-            <version>1.0.6</version>
-        </dependency>
         <!-- SpringBoot 启动器依赖  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -87,13 +81,13 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.3.4</version>
+            <version>3.5.1</version>
         </dependency>
         <!-- Redis扩展-->
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.16.4</version>
+            <version>3.16.8</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -145,7 +139,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.27</version>
+            <version>8.0.28</version>
         </dependency>
         <!-- Swagger API文档 -->
         <dependency>
@@ -163,7 +157,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.6.6</version>
+            <version>5.7.20</version>
         </dependency>
         <!-- Lombok -->
         <dependency>
@@ -184,6 +178,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.6.3</version>
             </plugin>
         </plugins>
     </build>

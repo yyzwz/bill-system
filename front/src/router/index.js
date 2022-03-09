@@ -3,13 +3,13 @@ import ViewUI from 'view-design';
 import Util from '../libs/util';
 import VueRouter from 'vue-router';
 import Cookies from 'js-cookie';
-import { routers } from './router';
+import { routers, otherRouter } from './router';
+import store from '../store';
 
 Vue.use(VueRouter);
 
-// 路由配置
 const RouterConfig = {
-    mode: 'history',
+    // mode: 'history',
     routes: routers
 };
 
@@ -20,6 +20,7 @@ router.beforeEach((to, from, next) => {
     Util.title(to.meta.title);
     var name = to.name;
     if (Cookies.get('locking') == '1' && name !== 'locking') {
+        // 判断当前是否是锁定状态
         next({
             replace: true,
             name: 'locking'
@@ -30,10 +31,12 @@ router.beforeEach((to, from, next) => {
         // 白名单
         var whiteList = name != 'login' && name != 'regist' && name != 'regist-result' && name != 'relate' && name != 'reset' && name != 'authorize';
         if (!Cookies.get('userInfo') && whiteList) {
+            // 判断是否已经登录且前往的页面不是登录页
             next({
                 name: 'login'
             });
         } else if (Cookies.get('userInfo') && name == 'login') {
+            // 判断是否已经登录且前往的是登录页
             Util.title();
             next({
                 name: 'home_index'

@@ -55,7 +55,7 @@
           <%
           if(item.type=="number"){
           %>
-          <InputNumber v-model="form.${item.field}" style="width:${width}"></InputNumber>
+          <InputNumber v-model="form.${item.field}" min="0" max="5000000" style="width:${width}"></InputNumber>
           <%
           }
           %>
@@ -152,8 +152,7 @@
 <%
 if(api){
 %>
-// 根据你的实际请求api.js位置路径修改
-import { edit${apiName} } from "@/api/index";
+import { edit${apiName} } from "./api.js";
 <%
 }
 %>

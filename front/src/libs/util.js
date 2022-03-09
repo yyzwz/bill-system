@@ -434,7 +434,6 @@ util.initRouterNode = function (routers, data) {
 
     for (var item of data) {
         let menu = Object.assign({}, item);
-        // menu.component = import(`@/views/${menu.component}.vue`);
         menu.component = lazyLoading(menu.component);
 
         if (item.children && item.children.length > 0) {
@@ -445,7 +444,7 @@ util.initRouterNode = function (routers, data) {
         let meta = {};
         // 给页面添加权限、标题、第三方网页链接
         meta.permTypes = menu.permTypes ? menu.permTypes : null;
-        meta.title = menu.title ? menu.title + " - 超市账单管理系统 By: 郑为中" : null;
+        meta.title = menu.title ? menu.title + " - 超市账单管理系统" : null;
         meta.url = menu.url ? menu.url : null;
         menu.meta = meta;
 

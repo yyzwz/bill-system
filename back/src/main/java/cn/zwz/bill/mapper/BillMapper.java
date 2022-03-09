@@ -1,0 +1,12 @@
+package cn.zwz.bill.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import cn.zwz.bill.entity.Bill;
+
+/**
+ * 账单数据处理层
+ * @author 郑为中
+ */
+public interface BillMapper extends BaseMapper<Bill> {
+
+}

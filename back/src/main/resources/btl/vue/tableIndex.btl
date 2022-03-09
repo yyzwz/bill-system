@@ -3,11 +3,15 @@
     <add v-if="currView=='add'" @close="currView='index'" @submited="submited" />
     <edit v-if="currView=='edit'" @close="currView='index'" @submited="submited" :data="formData" />
     <Card v-show="currView=='index'">
-        <%
-        if(searchSize>0&&!hideSearch){
-        %>
         <Row <% if(searchSize>0){ %>v-show="openSearch"<% } %> @keydown.enter.native="handleSearch">
-          <Form ref="searchForm" :model="searchForm" inline :label-width="70">
+          <Form ref="searchForm" :model="searchForm" inline :label-width="0">
+          <Form-item
+              ref="searchForm"
+              :model="searchForm"
+              inline
+              :label-width="0"
+              style="display:flex;"
+            >
           <%
           for(item in fields){
             if(item.searchable){
@@ -15,7 +19,7 @@
               <%
               if(item.searchType=="text"){
               %>
-              <Form-item label="${item.name}" prop="${item.field}">
+              <Form-item label="" prop="${item.field}">
                 <Input type="text" v-model="searchForm.${item.field}" placeholder="请输入${item.name}" clearable style="width: 200px"/>
               </Form-item>
               <%
@@ -24,9 +28,10 @@
               <%
               if(item.searchType=="select"){
               %>
-              <Form-item label="${item.name}" prop="${item.field}">
+              <Form-item label="" prop="${item.field}">
                 <Select v-model="searchForm.${item.field}" placeholder="请选择" clearable style="width: 200px">
-                  <Option value="0">请自行编辑下拉菜单</Option>
+                  <Option value="0">下拉框值A</Option>
+                  <Option value="0">下拉框值B</Option>
                 </Select>
               </Form-item>
               <%
@@ -35,7 +40,7 @@
               <%
               if(item.searchType=="date"){
               %>
-              <Form-item label="${item.name}" prop="${item.field}">
+              <Form-item label="" prop="${item.field}">
                 <DatePicker type="date" v-model="searchForm.${item.field}" placeholder="请选择" clearable style="width: 200px"></DatePicker>
               </Form-item>
               <%
@@ -44,7 +49,7 @@
               <%
               if(item.searchType=="daterange"){
               %>
-              <Form-item label="${item.name}" prop="${item.field}">
+              <Form-item label="" prop="${item.field}">
                 <DatePicker v-model="selectDate" type="daterange" format="yyyy-MM-dd" clearable @on-change="selectDateRange" placeholder="选择起始时间" style="width: 200px"></DatePicker>
               </Form-item>
               <%
@@ -53,7 +58,7 @@
               <%
               if(item.searchType=="area"){
               %>
-              <Form-item label="${item.name}" prop="${item.field}">
+              <Form-item label="" prop="${item.field}">
                 <al-cascader v-model="searchForm.${item.field}" data-type="code" level="${item.searchLevel}" style="width:200px"/>
               </Form-item>
               <%
@@ -63,164 +68,104 @@
             }
           }
           %>
-            <Form-item style="margin-left:-35px;" class="br">
-              <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
-              <Button @click="handleReset">重置</Button>
+          <Form-item style="margin-left:10px;" class="br">
+              <Button
+                @click="handleSearch"
+                type="primary"
+                icon="ios-search"
+                size="small"
+                ghost
+              >搜索</Button>
+              <Button
+                @click="handleReset"
+                type="warning"
+                size="small"
+                icon="md-refresh"
+                ghost
+              >重置</Button>
+              <Button
+                @click="add"
+                type="info"
+                size="small"
+                icon="md-add"
+                ghost
+              >添加</Button>
+              <Button
+                @click="delAll"
+                type="error"
+                icon="md-trash"
+                size="small"
+                ghost
+              >删除</Button>
+              <Button
+                @click="excelData"
+                type="success"
+                icon="md-paper-plane"
+                size="small"
+                ghost
+              >导出</Button>
             </Form-item>
+              <Form-item style="position:fixed;right:50px;top:130px">
+                <Button
+                  type="info"
+                  @click="showFilterPanelFlag = !showFilterPanelFlag"
+                  class="showFilterPanelFlag"
+                  icon="md-settings"
+                  size="small"
+                  ghost
+                >
+                列筛选</Button>
+                <Button
+                  type="warning"
+                  @click="modal1 = true"
+                  class="showFilterPanelFlag"
+                  icon="ios-help-circle-outline"
+                  size="small"
+                  ghost
+                >
+                使用教程</Button>
+                <Modal v-model="modal1" title="使用教程">
+                  <p>1.XXXXXXXXXXXXXXXXXXXXXXXX</p>
+                  <p>2.XXXXXXXXXXXXXXXXXXXXXXXX</p>
+                  <p>3.XXXXXXXXXXXXXXXXXXXXXXXX</p>
+                </Modal>
+              </Form-item>
+              </Form-item>
           </Form>
         </Row>
-        <%
-        }
-        %>
-        <%
-        if(searchSize>0&&hideSearch){
-        %>
-        <Row @keydown.enter.native="handleSearch">
-          <Form ref="searchForm" :model="searchForm" inline :label-width="70" class="search-form">
-          <%
-          for(item in firstTwo){
-          %>
-            <%
-            if(item.searchType=="text"){
-            %>
-            <Form-item label="${item.name}" prop="${item.field}">
-              <Input type="text" v-model="searchForm.${item.field}" placeholder="请输入${item.name}" clearable style="width: 200px"/>
-            </Form-item>
-            <%
-            }
-            %>
-            <%
-            if(item.searchType=="select"){
-            %>
-            <Form-item label="${item.name}" prop="${item.field}">
-              <Select v-model="searchForm.${item.field}" placeholder="请选择" clearable style="width: 200px">
-                <Option value="0">请自行编辑下拉菜单</Option>
-              </Select>
-            </Form-item>
-            <%
-            }
-            %>
-            <%
-            if(item.searchType=="date"){
-            %>
-            <Form-item label="${item.name}" prop="${item.field}">
-              <DatePicker type="date" v-model="searchForm.${item.field}" placeholder="请选择" clearable style="width: 200px"></DatePicker>
-            </Form-item>
-            <%
-            }
-            %>
-            <%
-            if(item.searchType=="daterange"){
-            %>
-            <Form-item label="${item.name}" prop="${item.field}">
-              <DatePicker v-model="selectDate" type="daterange" format="yyyy-MM-dd" clearable @on-change="selectDateRange" placeholder="选择起始时间" style="width: 200px"></DatePicker>
-            </Form-item>
-            <%
-            }
-            %>
-            <%
-            if(item.searchType=="area"){
-            %>
-            <Form-item label="${item.name}" prop="${item.field}">
-              <al-cascader v-model="searchForm.${item.field}" data-type="code" level="${item.searchLevel}" style="width:200px"/>
-            </Form-item>
-            <%
-            }
-            %>
-          <%
-          }
-          %>
-            <span v-if="drop">
-            <%
-            for(item in rest){
-            %>
-              <%
-              if(item.searchType=="text"){
-              %>
-              <Form-item label="${item.name}" prop="${item.field}">
-                <Input type="text" v-model="searchForm.${item.field}" placeholder="请输入${item.name}" clearable style="width: 200px"/>
-              </Form-item>
-              <%
-              }
-              %>
-              <%
-              if(item.searchType=="select"){
-              %>
-              <Form-item label="${item.name}" prop="${item.field}">
-                <Select v-model="searchForm.${item.field}" placeholder="请选择" clearable style="width: 200px">
-                  <Option value="0">请自行编辑下拉菜单</Option>
-                </Select>
-              </Form-item>
-              <%
-              }
-              %>
-              <%
-              if(item.searchType=="date"){
-              %>
-              <Form-item label="${item.name}" prop="${item.field}">
-                <DatePicker type="date" v-model="searchForm.${item.field}" placeholder="请选择" clearable style="width: 200px"></DatePicker>
-              </Form-item>
-              <%
-              }
-              %>
-              <%
-              if(item.searchType=="daterange"){
-              %>
-              <Form-item label="${item.name}" prop="${item.field}">
-                <DatePicker v-model="selectDate" type="daterange" format="yyyy-MM-dd" clearable @on-change="selectDateRange" placeholder="选择起始时间" style="width: 200px"></DatePicker>
-              </Form-item>
-              <%
-              }
-              %>
-              <%
-              if(item.searchType=="area"){
-              %>
-              <Form-item label="${item.name}" prop="${item.field}">
-                <al-cascader v-model="searchForm.${item.field}" data-type="code" level="${item.searchLevel}" style="width:200px"/>
-              </Form-item>
-              <%
-              }
-              %>
-            <%
-            }
-            %>
-            </span>
-            <Form-item style="margin-left:-35px;" class="br">
-              <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
-              <Button @click="handleReset">重置</Button>
-              <a class="drop-down" @click="dropDown">
-                {{dropDownContent}}
-                <Icon :type="dropDownIcon"></Icon>
-              </a>
-            </Form-item>
-          </Form>
-        </Row>
-        <%
-        }
-        %>
-      <Row class="operation">
-        <Button @click="add" type="primary" icon="md-add">添加</Button>
-        <Button @click="delAll" icon="md-trash">批量删除</Button>
-        <Button @click="getDataList" icon="md-refresh">刷新</Button>
-        <Button type="dashed" @click="openTip=!openTip">{{openTip ? "关闭提示" : "开启提示"}}</Button>
-      </Row>
-      <Row v-show="openTip">
-        <Alert show-icon>
-          已选择
-          <span class="select-count">{{selectCount}}</span> 项
-          <a class="select-clear" @click="clearSelectAll">清空</a>
-        </Alert>
-      </Row>
+       <Row class="operation" style="position:relative;">
+           <transition>
+             <div v-show="showFilterPanelFlag" class="filter-panel">
+               <CheckboxGroup v-model="selected">
+                 <div
+                   v-for="item in mycolumns"
+                   :key="item.key"
+                 >
+                   <Checkbox
+                     :label="item.title"
+                     style="margin: 2px 5px"
+                   ></Checkbox>
+                 </div>
+               </CheckboxGroup>
+             </div>
+           </transition>
+         </Row>
+     <Row v-show="openTip"> </Row>
       <Row>
         <Table
           :loading="loading"
+          :height="tableHeight"
           border
+          stripe
+          size="small"
           :columns="columns"
           :data="data"
           ref="table"
           sortable="custom"
           @on-sort-change="changeSort"
           @on-selection-change="changeSelect"
+          @on-row-click="rowClick"
+          :row-class-name="rowClassNmae"
         ></Table>
       </Row>
       <Row type="flex" justify="end" class="page">
@@ -230,7 +175,7 @@
           :page-size="searchForm.pageSize"
           @on-change="changePage"
           @on-page-size-change="changePageSize"
-          :page-size-opts="[10,20,50]"
+          :page-size-opts="[15,20,50]"
           size="small"
           show-total
           show-elevator
@@ -245,12 +190,10 @@
 <%
 if(api){
 %>
-// 根据你的实际请求api.js位置路径修改
-import { get${apiName}List, delete${apiName} } from "@/api/index";
+import { get${apiName}List, delete${apiName} } from "./api.js";
 <%
 }
 %>
-// 根据你的实际添加编辑组件位置路径修改
 import add from "./add.vue";
 import edit from "./edit.vue";
 export default {
@@ -261,6 +204,26 @@ export default {
   },
   data() {
     return {
+    tableHeight:0,
+    selected: [
+        "选择",
+        "序号",
+        <%
+              for(item in fields){
+                if(item.tableShow){
+              %>
+        "${item.name}",
+      <%
+        }
+      }
+      %>
+        "创建时间",
+        "创建者",
+        "修改时间",
+        "修改者",
+        "操作",
+      ],
+      modal1: false,
       <% if(searchSize>0){ %>
       openSearch: true, // 显示搜索
       <% }%>
@@ -275,7 +238,7 @@ export default {
       <% } %>
       searchForm: { // 搜索框初始化对象
         pageNumber: 1, // 当前页数
-        pageSize: 10, // 页面大小
+        pageSize: 15, // 页面大小
         sort: "createTime", // 默认排序字段
         order: "desc", // 默认排序方式
         <% if(daterangeSearch){ %>
@@ -288,17 +251,30 @@ export default {
       <% } %>
       selectList: [], // 多选数据
       selectCount: 0, // 多选计数
+      selectRow: 0,
       columns: [
       // 表头
       {
         type: "selection",
         width: 60,
-        align: "center"
+        title: "选择",
+        align: "center",
+        fixed: "left",
       },
       {
-        type: "index",
-        width: 60,
-        align: "center"
+        title: "序号",
+        width: 85,
+        align: "center",
+        fixed: "left",
+        sortType: true,
+        render: (h, params) => {
+          return h(
+            "span",
+            params.index +
+              (this.searchForm.pageNumber - 1) * this.searchForm.pageSize +
+              1
+          );
+        },
       },
       <%
       for(item in fields){
@@ -308,6 +284,7 @@ export default {
         title: "${item.name}",
         key: "${item.field}",
         minWidth: 120,
+        tooltip: true,
         <%
         if(item.sortable){
         %>
@@ -322,7 +299,7 @@ export default {
         <%
         if(item.defaultSort){
         %>
-        sortType: "${item.defaultSortType}"
+        sortType: "${item.defaultSortType}",
         <%
         }
         %>
@@ -331,6 +308,38 @@ export default {
         }
       }
       %>
+      {
+        title: "创建时间",
+        key: "createTime",
+        sortable: true,
+        sortType: "desc",
+        minWidth: 180,
+        align: "center",
+        tooltip: true,
+      },
+      {
+        title: "创建者",
+        key: "createBy",
+        sortable: true,
+        sortType: "desc",
+        minWidth: 100,
+        align: "center",
+        tooltip: true,
+      },
+      {
+        title: "修改时间",
+        key: "updateTime",
+        minWidth: 180,
+        align: "center",
+        tooltip: true,
+      },
+      {
+        title: "修改者",
+        key: "updateBy",
+        minWidth: 100,
+        align: "center",
+        tooltip: true,
+      },
       {
         title: "操作",
         key: "action",
@@ -344,7 +353,8 @@ export default {
                 props: {
                   type: "primary",
                   size: "small",
-                  icon: "ios-create-outline"
+                  icon: "ios-create-outline",
+                  ghost: true
                 },
                 style: {
                   marginRight: "5px"
@@ -363,7 +373,8 @@ export default {
                 props: {
                   type: "error",
                   size: "small",
-                  icon: "md-trash"
+                  icon: "md-trash",
+                  ghost: true
                 },
                 on: {
                   click: () => {
@@ -380,7 +391,8 @@ export default {
       data: [], // 表单数据
       pageNumber: 1, // 当前页数
       pageSize: 10, // 页面大小
-      total: 0 // 表单数据总数
+      total: 0, // 表单数据总数
+      showFilterPanelFlag: false,
     };
   },
   methods: {
@@ -400,17 +412,31 @@ export default {
       this.searchForm.pageSize = v;
       this.getDataList();
     },
+    rowClick(row, index) {
+      this.selectRow = row;
+    },
+    rowClassNmae(row, index) {
+      if (row.id == this.selectRow.id) {
+        return "rowClassNmaeColor";
+      }
+      return "";
+    },
+    excelData() {
+      this.$refs.table.exportCsv({
+        filename: "导出结果",
+      });
+    },
     <% if(searchSize>0){ %>
     handleSearch() {
       this.searchForm.pageNumber = 1;
-      this.searchForm.pageSize = 10;
+      this.searchForm.pageSize = 15;
       this.getDataList();
     },
     <% } %>
     handleReset() {
       this.$refs.searchForm.resetFields();
       this.searchForm.pageNumber = 1;
-      this.searchForm.pageSize = 10;
+      this.searchForm.pageSize = 15;
       <% if(daterangeSearch){ %>
       this.selectDate = null;
       this.searchForm.startDate = "";
@@ -459,11 +485,11 @@ export default {
       <%
         if(api){
         %>
-        get${apiName}List().then(res => {
+        get${apiName}List(this.searchForm).then(res => {
           this.loading = false;
           if (res.success) {
-            this.data = res.result.content;
-            this.total = res.result.totalElements;
+            this.data = res.result.records;
+            this.total = res.result.total;
           }
         });
         <%
@@ -591,11 +617,33 @@ export default {
   },
   mounted() {
     this.init();
-  }
+    this.tableHeight = Number(window.innerHeight - 273);
+    this.mycolumns = this.columns;
+    let showcolumns = [];
+    for (var i = 0; i < this.selected.length; i++) {
+      var item = this.selected[i];
+      for (var j = 0; j < this.columns.length; j++) {
+        if (this.columns[j].title == item) {
+          showcolumns.push(this.columns[j]);
+        }
+      }
+    }
+    this.columns = showcolumns;
+  },
+  watch: {
+     selected: function(newcolumns) {
+       let showcolumns = [];
+       for (var i = 0; i < this.mycolumns.length; i++) {
+         var item = this.mycolumns[i];
+         if (item.title == undefined) showcolumns.push(item);
+         else if (newcolumns.contains(item.title)) showcolumns.push(item);
+       }
+       this.columns = showcolumns;
+     },
+   },
 };
 </script>
 <style lang="less">
-// 建议引入通用样式 具体路径自行修改 可删除下面样式代码
 // @import "../../../styles/table-common.less";
 .search {
     .operation {
@@ -615,4 +663,42 @@ export default {
         margin-left: 5px;
     }
 }
+  .filter-panel {
+    width: 166px;
+    min-height: 120px;
+    height: 200px;
+    position: absolute;
+    background-color: white;
+    z-index: 9999;
+    margin-left: 1px;
+    overflow-y: scroll;
+    border: 1px solid blue;
+    top: 35px;
+    right: 10px;
+  }
+  .openSearch {
+    position: absolute;
+    right: 240px;
+  }
+  .openTip {
+    position: absolute;
+    right: 130px;
+  }
+  .showFilterPanelFlag {
+    position: static !important;
+    right: 10px;
+    margin-right: 10px;
+  }
+  .ivu-table td {
+    height: 38px !important;
+  }
+  .ivu-table-cell-with-expand {
+    height: 38px !important;
+    line-height: 38px !important;
+  }
+  .ivu-table .rowClassNmaeColor td {
+    background-color: #b0b3b6 !important;
+    color: #ffffff !important;
+    font-size: 12px;
+  }
 </style>

@@ -66,14 +66,14 @@ export const userData = [
         defaultRole: "角色 0(不分配默认角色) 1(分配默认注册用户角色)"
     },
     {
-        username: "xboot",
+        username: "zwz",
         password: "123456",
         avatar: "https://s1.ax1x.com/2018/05/19/CcdVQP.png",
         departmentId: "40652338142121984",
-        email: "1012139570@qq.com",
+        email: "916077357@qq.com",
         sex: 1,
         address: "[\"510000\",\"510100\",\"510104\"]",
-        mobile: "18782059038",
+        mobile: "17858758888",
         type: 0,
         status: 0,
         delFlag: 0,

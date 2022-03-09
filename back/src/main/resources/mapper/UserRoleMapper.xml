@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.zwz.modules.base.dao.mapper.UserRoleMapper">
+<mapper namespace="cn.zwz.data.dao.mapper.UserRoleMapper">
 
-    <select id="findByUserId" resultType="cn.zwz.modules.base.entity.Role">
+    <select id="findByUserId" resultType="cn.zwz.data.entity.Role">
       SELECT r.id id, name, r.data_type
       FROM t_user_role ur
       LEFT JOIN t_role r

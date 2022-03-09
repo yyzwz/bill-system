@@ -6,38 +6,32 @@
         <Row @keydown.enter.native="handleSearch">
             <Form ref="searchForm" :model="searchForm" inline :label-width="70" class="search-form">
                 <Form-item label="名称" prop="name">
-                    <Input type="text" v-model="searchForm.name" placeholder="请输入供应商名称" clearable style="width: 200px" />
+                    <Input type="text" v-model="searchForm.name" placeholder="请输入供应商名称" clearable style="width: 140px" />
                 </Form-item>
                 <Form-item label="电话" prop="mobile">
-                    <Input type="text" v-model="searchForm.mobile" placeholder="请输入供应商电话" clearable style="width: 200px" />
+                    <Input type="text" v-model="searchForm.mobile" placeholder="请输入供应商电话" clearable style="width: 140px" />
                 </Form-item>
-                <span v-if="drop">
-                    <Form-item label="地址" prop="address">
-                        <Input type="text" v-model="searchForm.address" placeholder="请输入供应商地址" clearable style="width: 200px" />
-                    </Form-item>
-                    <Form-item label="分类" prop="type">
-                        <Select v-model="form.type" clearable style="width:570px">
-                            <Option value="一级供应商">一级供应商</Option>
-                            <Option value="二级供应商">二级供应商</Option>
-                            <Option value="三级供应商">三级供应商</Option>
-                        </Select>
-                        <!-- <Input type="text" v-model="searchForm.type" placeholder="请输入供应商分类" clearable style="width: 200px"/> -->
-                    </Form-item>
-                </span>
+                <Form-item label="地址" prop="address">
+                    <Input type="text" v-model="searchForm.address" placeholder="请输入供应商地址" clearable style="width: 140px" />
+                </Form-item>
+                <Form-item label="分类" prop="type">
+                    <Select v-model="searchForm.type" placeholder="请选择供应商分类" clearable style="width:140px">
+                        <Option value="一级供应商">一级供应商</Option>
+                        <Option value="二级供应商">二级供应商</Option>
+                        <Option value="三级供应商">三级供应商</Option>
+                    </Select>
+                    <!-- <Input type="text" v-model="searchForm.type" placeholder="请输入供应商分类" clearable style="width: 200px"/> -->
+                </Form-item>
                 <Form-item style="margin-left:-35px;" class="br">
-                    <Button @click="handleSearch" type="primary" icon="ios-search">搜索</Button>
-                    <Button @click="handleReset">重置</Button>
-                    <a class="drop-down" @click="dropDown">
-                        {{dropDownContent}}
-                        <Icon :type="dropDownIcon"></Icon>
-                    </a>
+                    <Button @click="handleSearch" type="primary" icon="ios-search" ghost>搜索</Button>
+                    <Button @click="handleReset" type="warning" ghost>重置</Button>
                 </Form-item>
             </Form>
         </Row>
         <Row class="operation">
-            <Button @click="add" type="primary" icon="md-add">添加</Button>
-            <Button @click="delAll" icon="md-trash">批量删除</Button>
-            <Button @click="getDataList" icon="md-refresh">刷新</Button>
+            <Button @click="add" type="primary" icon="md-add" ghost>添加</Button>
+            <Button @click="delAll" type="error" icon="md-trash" ghost>批量删除</Button>
+            <Button @click="getDataList" type="success" icon="md-refresh" ghost>刷新</Button>
             <Button type="dashed" @click="openTip=!openTip">{{openTip ? "关闭提示" : "开启提示"}}</Button>
         </Row>
         <Row v-show="openTip">
@@ -58,12 +52,10 @@
 </template>
 
 <script>
-// 根据你的实际请求api.js位置路径修改
 import {
     getSupplierList,
     deleteSupplier
 } from "./api.js";
-// 根据你的实际添加编辑组件位置路径修改
 import add from "./add.vue";
 import edit from "./edit.vue";
 export default {
@@ -74,24 +66,23 @@ export default {
     },
     data() {
         return {
-            openSearch: true, // 显示搜索
-            openTip: true, // 显示提示
+            openSearch: true,
+            openTip: true,
             formData: {},
             currView: "index",
-            loading: true, // 表单加载状态
+            loading: true,
             drop: false,
             dropDownContent: "展开",
             dropDownIcon: "ios-arrow-down",
-            searchForm: { // 搜索框初始化对象
-                pageNumber: 1, // 当前页数
-                pageSize: 10, // 页面大小
-                sort: "createTime", // 默认排序字段
-                order: "desc", // 默认排序方式
+            searchForm: {
+                pageNumber: 1,
+                pageSize: 10,
+                sort: "createTime",
+                order: "desc",
             },
-            selectList: [], // 多选数据
-            selectCount: 0, // 多选计数
+            selectList: [],
+            selectCount: 0,
             columns: [
-                // 表头
                 {
                     type: "selection",
                     width: 60,
@@ -138,7 +129,8 @@ export default {
                                     props: {
                                         type: "primary",
                                         size: "small",
-                                        icon: "ios-create-outline"
+                                        icon: "ios-create-outline",
+                                        ghost: true
                                     },
                                     style: {
                                         marginRight: "5px"
@@ -156,7 +148,8 @@ export default {
                                     props: {
                                         type: "error",
                                         size: "small",
-                                        icon: "md-trash"
+                                        icon: "md-trash",
+                                        ghost: true
                                     },
                                     on: {
                                         click: () => {
@@ -170,10 +163,10 @@ export default {
                     }
                 }
             ],
-            data: [], // 表单数据
-            pageNumber: 1, // 当前页数
-            pageSize: 10, // 页面大小
-            total: 0 // 表单数据总数
+            data: [],
+            pageNumber: 1,
+            pageSize: 10,
+            total: 0
         };
     },
     methods: {
@@ -202,7 +195,6 @@ export default {
             this.$refs.searchForm.resetFields();
             this.searchForm.pageNumber = 1;
             this.searchForm.pageSize = 10;
-            // 重新加载数据
             this.getDataList();
         },
         changeSort(e) {
@@ -244,7 +236,6 @@ export default {
             this.currView = "add";
         },
         edit(v) {
-            // 转换null为""
             for (let attr in v) {
                 if (v[attr] == null) {
                     v[attr] = "";
@@ -258,11 +249,9 @@ export default {
         remove(v) {
             this.$Modal.confirm({
                 title: "确认删除",
-                // 记得确认修改此处
-                content: "您确认要删除 " + v.name + " ?",
+                content: "您确认要删除 ?",
                 loading: true,
                 onOk: () => {
-                    // 删除
                     deleteSupplier({
                         ids: v.id
                     }).then(res => {
@@ -290,7 +279,6 @@ export default {
                         ids += e.id + ",";
                     });
                     ids = ids.substring(0, ids.length - 1);
-                    // 批量删除
                     deleteSupplier({
                         ids: ids
                     }).then(res => {
@@ -312,8 +300,6 @@ export default {
 </script>
 
 <style lang="less">
-// 建议引入通用样式 具体路径自行修改 可删除下面样式代码
-// @import "../../../styles/table-common.less";
 .search {
     .operation {
         margin-bottom: 2vh;

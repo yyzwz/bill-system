@@ -4,7 +4,7 @@
       <!-- 主体部分 -->
       <div class="body">
         <!--logo标题图片 -->
-        <img class="title" src="../../assets/icon/logo.png" alt="" />
+        <img class="title" src="../../assets/login/logo.png" alt="" />
         <!--第二排内容 -->
         <div class="awayMenu">
           <!--左侧 -->

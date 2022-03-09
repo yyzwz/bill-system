@@ -1,7 +1,7 @@
 <template>
   <div>
     <Row class="header">
-      <img src="../../assets/logo.png" width="220px">
+      <img src="../../assets/logo-white.png" width="220px">
       <div class="description">超市账单管理系统</div>
     </Row>
   </div>
@@ -20,8 +20,8 @@ export default {
   text-align: center;
 
   .description {
-    font-size: 22px;
-    color: rgba(0, 0, 0, 0.55);
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.45);
     margin-top: 1vh;
   }
 }

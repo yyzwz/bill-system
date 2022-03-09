@@ -1,6 +1,6 @@
 package ${entity.entityPackage};
 
-import cn.zwz.base.XbootBaseEntity;
+import cn.zwz.basics.baseClass.ZwzBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
@@ -41,9 +41,18 @@ import javax.persistence.Table;
 @Table(name = "${entity.tableName}")
 @TableName("${entity.tableName}")
 @ApiModel(value = "${entity.description}")
-public class ${entity.className} extends XbootBaseEntity {
+public class ${entity.className} extends ZwzBaseEntity {
 
     private static final long serialVersionUID = 1L;
+
+    <%
+    if(!entity.isTree){
+    %>
+    @ApiModelProperty(value = "${entity.description}标题")
+    private String title;
+    <%
+    }
+    %>
 
     <%
     if(entity.activiti&&!entity.isTree){
